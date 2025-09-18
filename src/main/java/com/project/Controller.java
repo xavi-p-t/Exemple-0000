@@ -72,10 +72,24 @@ public class Controller {
 
         List<String> tokens = new ArrayList<>();
         StringBuilder numero = new StringBuilder();
-
+        
+        //separamos el texto
         for (char c : expr.toCharArray()) {
             if (Character.isDigit(c) || c == '.') {
                 numero.append(c);
+            //comprobamos negativos
+            }else if (c == '-') {
+            
+                if (numero.length() == 0 && (tokens.isEmpty() )) {
+                    
+                    numero.append(c);
+                } else {
+                    if (numero.length() > 0) {
+                        tokens.add(numero.toString());
+                        numero.setLength(0);
+                    }
+                    tokens.add(String.valueOf(c));
+                }
             } else {
                 if (numero.length() > 0) {
                     tokens.add(numero.toString());
@@ -87,6 +101,8 @@ public class Controller {
         if (numero.length() > 0) {
             tokens.add(numero.toString());
         }
+
+        //primero hacemos la multiplicacion y division
         for (int i = 0; i < tokens.size(); ) {
             String t = tokens.get(i);
             if (t.equals("*") || t.equals("/")) {
@@ -101,7 +117,7 @@ public class Controller {
             }
         }
 
-        
+        //despues sumamos o restamos
         double resultado = Double.parseDouble(tokens.get(0));
         for (int i = 1; i < tokens.size(); i += 2) {
             String op = tokens.get(i);
